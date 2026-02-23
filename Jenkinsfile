@@ -1,5 +1,10 @@
 pipeline {
-  agent any
+  agent {
+    docker {
+      image 'maven:3.9.9-eclipse-temurin-17'
+      args '-v $HOME/.m2:/root/.m2'
+    }
+  }
 
   triggers {
     cron('H/5 * * * 1')   // Mondays every 5 minutes
@@ -18,7 +23,7 @@ pipeline {
       }
       post {
         always {
-          junit '**/target/surefire-reports/*.xml'
+          junit allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml'
           archiveArtifacts artifacts: '**/target/*.jar, **/target/site/jacoco/**', allowEmptyArchive: true
         }
       }
