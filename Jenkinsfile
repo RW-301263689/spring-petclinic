@@ -1,13 +1,8 @@
 pipeline {
-  agent {
-    docker {
-      image 'maven:3.9.9-eclipse-temurin-17'
-      args '-v $HOME/.m2:/root/.m2'
-    }
-  }
+  agent any
 
   triggers {
-    cron('H/5 * * * 1')   // Mondays every 5 minutes
+    cron('H/5 * * * 1')   
   }
 
   options { timestamps() }
@@ -19,7 +14,10 @@ pipeline {
 
     stage('Build & Test (JaCoCo)') {
       steps {
-        sh 'mvn -B clean test jacoco:report'
+        sh '''
+          chmod +x mvnw
+          ./mvnw -B clean test jacoco:report
+        '''
       }
       post {
         always {
