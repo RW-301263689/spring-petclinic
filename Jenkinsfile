@@ -25,16 +25,6 @@ pipeline {
   post {
     always {
       junit allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml'
-
-      publishHTML(target: [
-        allowMissing: false,
-        alwaysLinkToLastBuild: true,
-        keepAll: true,
-        reportDir: 'target/site/jacoco',
-        reportFiles: 'index.html',
-        reportName: 'JaCoCo Report'
-      ])
-
       archiveArtifacts artifacts: '**/target/*.jar, **/target/site/jacoco/**', allowEmptyArchive: true
     }
   }
