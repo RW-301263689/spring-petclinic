@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   triggers {
-    cron('H/5 * * * 1')   
+    cron('H/5 * * * 1')
   }
 
   options { timestamps() }
@@ -19,12 +19,13 @@ pipeline {
           ./mvnw -B clean test jacoco:report
         '''
       }
-      post {
-        always {
-          junit allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml'
-          archiveArtifacts artifacts: '**/target/*.jar, **/target/site/jacoco/**', allowEmptyArchive: true
-        }
-      }
+    }
+  }
+
+  post {
+    always {
+      junit allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml'
+      archiveArtifacts artifacts: '**/target/*.jar, **/target/site/jacoco/**', allowEmptyArchive: true
     }
   }
 }
